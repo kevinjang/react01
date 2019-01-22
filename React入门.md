@@ -327,7 +327,7 @@
                return <Consumer >
                    {
                        store=>{
-                   		return <Button type="primary">{store.name}</Button>
+                   		return <Button type="primary" onClick={()=>store.sayHi()}>{store.name}</Button>
                        }
                	}
                    </Consumer>
@@ -356,6 +356,139 @@
        ```
 
 20. 组件的多个模式
+
+21. redux-管理数据的政委
+
+    简单项目：state+props+context足矣
+
+    1. npm i --save redux
+
+    2. 创建数据中心
+
+       ```javascript
+       // store.js —— 单向数据流要求此处只能返回新的数据，不能修改现有的数据
+       import createStore from 'redux'
+       
+       const counterReducer = (state = 0, action)=>{
+           switch(action.type){
+               case 'add':
+                   return state + 0;
+               case 'minus':
+                   return state - 1;
+               default:
+                   return state;
+           }
+       }
+       
+       const store = createStore(counterReducer)
+       
+       export default store
+       ```
+
+    3. 在App中使用
+
+       ```react
+       // App.js
+       // 单纯的dispatch不会触发页面的渲染操作，需要在index.js中对store进行监听，然后触发渲染操作
+       import React from 'react'
+       import store from './store'
+       
+       class App extends React.Component{
+           constructor(props){
+               super(props)        
+           }
+           
+           render(){
+               return <div>
+                   <p>
+                       {store.state}
+                   </p>
+                   <button onClick={()=>store.dispatch({type:'add'})}>+</button>
+                   <button onClick={()=>store.dispatch({type:'minus'})}>-</button>
+               </div>
+           }
+       }
+       ```
+
+    4. index.js中对store进行监听
+
+       ```react
+       // index.js
+       // 最简单无脑的方式
+       import React from 'react'
+       import ReactDOM from 'react-dom'
+       import store from './store'
+       
+       const render = ()=>{
+           ReactDOM.render(<App />,
+                          document.getElementById('root'))
+       }
+       
+       render()
+       // 触发渲染操作
+       store.subscribe(render)
+       
+       ```
+
+    5. react-redux——将react和redux封装起来了
+
+       1. Provider 顶级组件，提供数据
+       2. connect 高阶组件，提供数据和方法
+
+       ```react
+       // index.js
+       import React from 'react'
+       import ReactDOM from 'react-dom'
+       
+       import {Provider} from 'react-redux'
+       import store from './store'
+       import App from './App'
+       
+       const render = ()=>{
+           ReactDOM.render(<Provider store={store}>
+               <App />
+           </Provider>,document.getElementById('root'))
+       }
+       
+       render()
+       ```
+
+       ```react
+       // App.js
+       import React from 'react'
+       import {connect} from 'react-redux'
+       
+       class App extends React.Component{
+           render(){
+               return <div>
+                   {this.props.num}
+                   <button onClick={this.props.add()}>+</button>
+                   <button onClick={this.props.minus()}>-</button>
+               </div>
+           }
+       }
+       
+       const mapStatetoProps = state=>{
+           return {
+               num: state
+           }
+       }
+       
+       const mapDispatchtoProps = dispatch =>{
+           return {
+               add: ()=>dispatch({type: 'add'}),
+               minus: ()=> dispatch({type: 'minus'})
+           }
+       }
+       
+       App = connect(mapStatetoProps, mapDispatchtoProps)
+       
+       export default App
+       ```
+
+    6. 
+
+22. 
 
 ### 后续展望
 
