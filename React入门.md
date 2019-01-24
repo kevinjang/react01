@@ -124,6 +124,11 @@
     >    npm install react-app-rewired@2.0.2-next.0 babel-plugin-import --save
     >    ```
     >
+    >    ```javascript
+    >    // config-overrides.js
+    >    
+    >    ```
+    >
     > 2. 容器组件VS展示组件
     >
     > 3. 纯净组件PureComponent - memo函数式实现纯净组件的功能（>=React.v16）
@@ -357,16 +362,16 @@
 
 20. 组件的多个模式
 
+### redux-管理数据的政委
 
+简单项目：state+props+context足矣
 
-    ### redux-管理数据的政委
+1. npm i --save redux
+2. 创建数据中心
+3. 在App中使用
 
-    简单项目：state+props+context足矣
-
-    1. npm i --save redux
-
-    2. 创建数据中心
-
+    
+    
        ```javascript
        // store.js —— 单向数据流要求此处只能返回新的数据，不能修改现有的数据
        import createStore from 'redux'
@@ -386,9 +391,9 @@
        
        export default store
        ```
-
-    3. 在App中使用
-
+    
+    
+    
        ```react
        // App.js
        // 单纯的dispatch不会触发页面的渲染操作，需要在index.js中对store进行监听，然后触发渲染操作
@@ -411,9 +416,9 @@
            }
        }
        ```
-
+    
     4. index.js中对store进行监听
-
+    
        ```react
        // index.js
        // 最简单无脑的方式
@@ -431,12 +436,12 @@
        store.subscribe(render)
        
        ```
-
+    
     5. ***react-redux***——将react和redux封装起来了
-
+    
        1. Provider 顶级组件，提供数据
        2. connect 高阶组件，提供数据和方法
-
+    
        ```react
        // index.js
        import React from 'react'
@@ -454,7 +459,7 @@
        
        render()
        ```
-
+    
        ```react
        // App.js
        import React from 'react'
@@ -491,9 +496,9 @@
        
        export default App
        ```
-
+    
     6. 使用**装饰器**修改5中的App.js
-
+    
        ```react
        // App.js
        import React from 'react'
@@ -518,7 +523,7 @@
            }
        }
        ```
-
+    
        ```react
        // 同步函数的dispatch还可以简写成一个对象即可
        @connect(
@@ -529,14 +534,20 @@
            }
        )
        ```
-
+    
        tip[^1]:高阶组件都可以写成装饰器模式
-
+    
     7. 所有的dispatch请求都要经过中间件的处理，才到达最终的store
-
+    
     8. **redux-logger**
 
-21. 
+21. react-router-4
+
+    HashRouter VS BrowserRouter
+
+    Link(<a>),Route(<router-view>),Redirect都是组件哦
+
+22. 原理讲解
 
 ### 后续展望
 
