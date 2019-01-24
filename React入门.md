@@ -357,7 +357,9 @@
 
 20. 组件的多个模式
 
-21. redux-管理数据的政委
+
+
+    ### redux-管理数据的政委
 
     简单项目：state+props+context足矣
 
@@ -430,7 +432,7 @@
        
        ```
 
-    5. react-redux——将react和redux封装起来了
+    5. ***react-redux***——将react和redux封装起来了
 
        1. Provider 顶级组件，提供数据
        2. connect 高阶组件，提供数据和方法
@@ -474,6 +476,10 @@
            }
        }
        
+       {/**
+       const mapStatetoProps = state=>({num: state})
+       */}
+       
        const mapDispatchtoProps = dispatch =>{
            return {
                add: ()=>dispatch({type: 'add'}),
@@ -481,14 +487,56 @@
            }
        }
        
-       App = connect(mapStatetoProps, mapDispatchtoProps)
+       App = connect(mapStatetoProps, mapDispatchtoProps)(App)
        
        export default App
        ```
 
-    6. 
+    6. 使用**装饰器**修改5中的App.js
 
-22. 
+       ```react
+       // App.js
+       import React from 'react'
+       import {Provider,connect} from 'react-redux'
+       import store from './store'
+       
+       @connect(
+       // 第一个参数就是数据
+          	state=>({num: state}),
+       // 第二个参数就是方法
+           dispatch=>({
+               add:dispatch({type: 'add'}),
+               minus:dispatch({type: 'minus'})
+           })
+       )
+       class App extends React.Component{
+           render(){
+               return <div>
+                   <button onClick={this.props.add()}>+</button>
+                   <button onClick={this.props.minus()}>-</button>
+               </div>
+           }
+       }
+       ```
+
+       ```react
+       // 同步函数的dispatch还可以简写成一个对象即可
+       @connect(
+           state => ({num: state}),
+           {
+               add:()=>({type: 'add'}),
+               minus:()=>({type: 'minus'})
+           }
+       )
+       ```
+
+       tip[^1]:高阶组件都可以写成装饰器模式
+
+    7. 所有的dispatch请求都要经过中间件的处理，才到达最终的store
+
+    8. **redux-logger**
+
+21. 
 
 ### 后续展望
 
@@ -515,3 +563,14 @@
    useEffect
 
 8. react 的新生命周期
+
+
+
+
+
+
+
+
+
+[^1]: 高阶组件都可以写成装饰器模式
+
